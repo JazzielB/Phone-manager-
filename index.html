@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Entry Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Phone Number Details</h1>
+        <form id="phoneForm">
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" required><br><br>
+
+            <label for="auth_token">Auth Token:</label>
+            <input type="text" id="auth_token" name="auth_token" required><br><br>
+
+            <label for="twilio_sid">Twilio SID:</label>
+            <input type="text" id="twilio_sid" name="twilio_sid" required><br><br>
+
+            <label for="label">Label:</label>
+            <input type="text" id="label" name="label" required><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('phoneForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                phone_number: document.getElementById('phone_number').value,
+                auth_token: document.getElementById('auth_token').value,
+                twilio_sid: document.getElementById('twilio_sid').value,
+                label: document.getElementById('label').value
+            };
+
+            fetch('http://localhost:8000/api/phone_numbers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = 'Phone number saved successfully!';
+            })
+            .catch(error => {
+                document.getElementById('message').innerText = 'Error saving phone number.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
